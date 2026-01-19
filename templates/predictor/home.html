@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diabetes Prediction System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        input {
+            width: 100%;
+            padding: 6px 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 4px;
+        }
+        .diabetic {
+            background-color: #ffe5e5;
+            color: #b30000;
+        }
+        .non-diabetic {
+            background-color: #e5ffe5;
+            color: #006600;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Diabetes Prediction</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.name == 'diabetes_pedigree_function' %}
+                        <button
+                            type="button"
+                            style="margin-left: 6px; padding: 0 6px; border-radius: 50%; border: 1px solid #888; background: #eee; cursor: pointer; font-size: 0.8em;"
+                            onclick="alert('0.0–0.3: little or no family history\n0.3–0.8: some family history\n>0.8: strong family history');"
+                        >
+                            i
+                        </button>
+                    {% endif %}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div style="color: red; font-size: 0.9em;">
+                        {{ field.errors|striptags }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit">Check Risk</button>
+    </form>
+
+    {% if prediction is not None %}
+        <div class="result {% if prediction == 1 %}diabetic{% else %}non-diabetic{% endif %}">
+            {% if prediction == 1 %}
+                <strong>Result:</strong> The model predicts you are likely <strong>DIABETIC</strong>.
+            {% else %}
+                <strong>Result:</strong> The model predicts you are likely <strong>NON-DIABETIC</strong>.
+            {% endif %}
+            <br>
+            Estimated probability of diabetes: {{ probability|floatformat:2 }}%
+        </div>
+        <div class="note">
+            This is a machine learning prediction based on the PIMA Indians Diabetes dataset.
+            It is not a medical diagnosis. Always consult a doctor for health decisions.
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
