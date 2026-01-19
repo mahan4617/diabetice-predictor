@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v)rlphj&k8!*ap2++)l-$=sp2cd&ubh(+yq*ub4k_+n+weumh!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://diabetice-predictor.onrender.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -116,4 +116,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
 
